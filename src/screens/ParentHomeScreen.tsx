@@ -111,7 +111,10 @@ const ParentHomeScreen = ({ navigation }: any) => {
                         <Text style={styles.trackTitle}>School Bus Status</Text>
                         <Text style={styles.trackSub}>Near: Central Market (2km away)</Text>
                     </View>
-                    <TouchableOpacity style={styles.trackBtn}>
+                    <TouchableOpacity
+                        style={styles.trackBtn}
+                        onPress={() => navigation.navigate('ParentTrack')}
+                    >
                         <Text style={styles.trackBtnText}>Track</Text>
                     </TouchableOpacity>
                 </View>

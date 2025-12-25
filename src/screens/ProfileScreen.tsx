@@ -8,6 +8,7 @@ import {
     StatusBar,
     ScrollView,
     Dimensions,
+    Platform,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -75,7 +76,27 @@ const ProfileScreen = ({ navigation }: any) => {
                 </View>
 
                 {menuItems.map((item, i) => (
-                    <TouchableOpacity key={i} style={styles.menuItem}>
+                    <TouchableOpacity
+                        key={i}
+                        style={styles.menuItem}
+                        onPress={() => {
+                            if (item.label === 'Personal Information') {
+                                navigation.navigate('TeacherPersonalInfo');
+                            }
+                            if (item.label === 'Academic Record') {
+                                navigation.navigate('TeacherAcademicRecord');
+                            }
+                            if (item.label === 'Parent / Guardian') {
+                                navigation.navigate('TeacherGuardian');
+                            }
+                            if (item.label === 'Transport Details') {
+                                navigation.navigate('TeacherTransport');
+                            }
+                            if (item.label === 'Fee History') {
+                                navigation.navigate('TeacherFeeHistory');
+                            }
+                        }}
+                    >
                         <View style={styles.menuIconBox}>
                             <Text style={styles.menuIcon}>{item.icon}</Text>
                         </View>
@@ -109,11 +130,12 @@ const styles = StyleSheet.create({
     },
     headerBackdrop: {
         backgroundColor: '#4F46E5',
-        height: 320,
+        paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 20) + 15 : 20,
+        paddingBottom: 60,
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
         paddingHorizontal: 24,
-        paddingTop: 10,
+        zIndex: 10,
     },
     navRow: {
         flexDirection: 'row',
@@ -242,9 +264,10 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     scrollBody: {
-        paddingTop: 60,
+        paddingTop: 70,
         paddingHorizontal: 24,
         paddingBottom: 40,
+        zIndex: 1,
     },
     sectionHead: {
         marginBottom: 20,

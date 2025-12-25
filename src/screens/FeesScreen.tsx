@@ -144,11 +144,12 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#4F46E5',
-        paddingTop: 10,
-        paddingBottom: 70,
+        paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 20) + 15 : 20,
+        paddingBottom: 75,
         paddingHorizontal: 24,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
+        zIndex: 10,
     },
     headerTop: {
         flexDirection: 'row',
@@ -217,8 +218,9 @@ const styles = StyleSheet.create({
         fontWeight: '800',
     },
     scrollBody: {
-        paddingTop: 65,
+        paddingTop: 75,
         paddingHorizontal: 24,
+        zIndex: 1,
     },
     tabContainer: {
         flexDirection: 'row',

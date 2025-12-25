@@ -20,6 +20,12 @@ import ParentFeeScreen from '../screens/ParentFeeScreen';
 import ParentLeaveScreen from '../screens/ParentLeaveScreen';
 import ParentHealthScreen from '../screens/ParentHealthScreen';
 import ParentDiaryScreen from '../screens/ParentDiaryScreen';
+import TeacherPersonalInfoScreen from '../screens/TeacherPersonalInfoScreen';
+import TeacherAcademicRecordScreen from '../screens/TeacherAcademicRecordScreen';
+import TeacherGuardianScreen from '../screens/TeacherGuardianScreen';
+import TeacherTransportScreen from '../screens/TeacherTransportScreen';
+import TeacherFeeHistoryScreen from '../screens/TeacherFeeHistoryScreen';
+import ParentTrackScreen from '../screens/ParentTrackScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -42,6 +48,12 @@ export type RootStackParamList = {
   ParentLeave: undefined;
   ParentHealth: undefined;
   ParentDiary: undefined;
+  TeacherPersonalInfo: undefined;
+  TeacherAcademicRecord: undefined;
+  TeacherGuardian: undefined;
+  TeacherTransport: undefined;
+  TeacherFeeHistory: undefined;
+  ParentTrack: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -72,6 +84,12 @@ const RootNavigator = () => {
       <Stack.Screen name="ParentLeave" component={ParentLeaveScreen} />
       <Stack.Screen name="ParentHealth" component={ParentHealthScreen} />
       <Stack.Screen name="ParentDiary" component={ParentDiaryScreen} />
+      <Stack.Screen name="TeacherPersonalInfo" component={TeacherPersonalInfoScreen} />
+      <Stack.Screen name="TeacherAcademicRecord" component={TeacherAcademicRecordScreen} />
+      <Stack.Screen name="TeacherGuardian" component={TeacherGuardianScreen} />
+      <Stack.Screen name="TeacherTransport" component={TeacherTransportScreen} />
+      <Stack.Screen name="TeacherFeeHistory" component={TeacherFeeHistoryScreen} />
+      <Stack.Screen name="ParentTrack" component={ParentTrackScreen} />
     </Stack.Navigator>
   );
 };

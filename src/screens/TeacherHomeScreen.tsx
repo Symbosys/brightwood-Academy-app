@@ -166,11 +166,12 @@ const styles = StyleSheet.create({
     },
     headerBackground: {
         backgroundColor: '#4F46E5',
-        height: 220,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 20) + 15 : 20,
+        paddingBottom: 60,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
         paddingHorizontal: 24,
+        zIndex: 10,
     },
     headerContent: {
         flexDirection: 'row',
@@ -258,8 +259,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.1)',
     },
     scrollArea: {
-        paddingTop: 60,
+        paddingTop: 75,
         paddingHorizontal: 24,
+        zIndex: 1,
     },
     catGrid: {
         flexDirection: 'row',
