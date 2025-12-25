@@ -96,6 +96,7 @@ const StudentHomeScreen = ({ navigation }: any) => {
                                 if (item.name === 'Exams') navigation.navigate('Exams');
                                 if (item.name === 'Fees') navigation.navigate('Fees');
                                 if (item.name === 'Library') navigation.navigate('Library');
+                                if (item.name === 'Calendar') navigation.navigate('Calendar');
                             }}
                         >
                             <View style={[styles.iconBox, { backgroundColor: item.bg }]}>
@@ -193,11 +194,12 @@ const styles = StyleSheet.create({
     },
     headerArea: {
         backgroundColor: '#4F46E5',
-        height: 240,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 20) + 15 : 20,
+        paddingBottom: 65,
         paddingHorizontal: 24,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
+        zIndex: 10,
     },
     headerTop: {
         flexDirection: 'row',
@@ -279,8 +281,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F1F5F9',
     },
     scrollBody: {
-        paddingTop: 65,
+        paddingTop: 80,
         paddingHorizontal: 24,
+        zIndex: 1,
     },
     gridContainer: {
         flexDirection: 'row',

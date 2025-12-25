@@ -19,7 +19,7 @@ const TeacherHomeScreen = ({ navigation }: any) => {
         { name: 'Attendance', icon: '📋', count: 'Done', bg: '#FDF2F8', border: '#FCE7F3' },
         { name: 'Assignments', icon: '📥', count: '08', bg: '#F0FDF4', border: '#BBF7D0' },
         { name: 'Syllabus', icon: '📊', count: '75%', bg: '#EEF2FF', border: '#C7D2FE' },
-        { name: 'Salary', icon: '💰', count: 'Credited', bg: '#FFF7ED', border: '#FED7AA' },
+        { name: 'Payments', icon: '💰', count: 'Credited', bg: '#FFF7ED', border: '#FED7AA' },
     ];
 
     const upcomingLectures = [
@@ -78,7 +78,21 @@ const TeacherHomeScreen = ({ navigation }: any) => {
                 {/* Management Grid */}
                 <View style={styles.catGrid}>
                     {teachingCategories.map((cat, i) => (
-                        <TouchableOpacity key={i} style={[styles.catCard, { backgroundColor: cat.bg, borderColor: cat.border }]}>
+                        <TouchableOpacity
+                            key={i}
+                            style={[styles.catCard, { backgroundColor: cat.bg, borderColor: cat.border }]}
+                            onPress={() => {
+                                if (cat.name === 'Payments') {
+                                    navigation.navigate('TeacherPayments');
+                                } else if (cat.name === 'Syllabus') {
+                                    navigation.navigate('TeacherSyllabus');
+                                } else if (cat.name === 'Assignments') {
+                                    navigation.navigate('TeacherAssignments');
+                                } else if (cat.name === 'Attendance') {
+                                    navigation.navigate('TeacherAttendance');
+                                }
+                            }}
+                        >
                             <Text style={styles.catIcon}>{cat.icon}</Text>
                             <Text style={styles.catName}>{cat.name}</Text>
                             <View style={styles.catBadge}>

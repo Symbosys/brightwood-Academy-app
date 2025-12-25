@@ -11,6 +11,7 @@ import {
     SafeAreaView,
     StatusBar,
     Image,
+    ScrollView,
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -46,69 +47,74 @@ const LoginScreen = ({ navigation }: any) => {
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.formSection}>
-                <View style={styles.formContainer}>
-                    <Text style={styles.welcomeText}>Login</Text>
-                    <Text style={styles.instructText}>Choose your role and enter credentials.</Text>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                >
+                    <View style={styles.formContainer}>
+                        <Text style={styles.welcomeText}>Login</Text>
+                        <Text style={styles.instructText}>Choose your role and enter credentials.</Text>
 
-                    {/* Role Selector Tabs */}
-                    <View style={styles.roleTabs}>
-                        {(['Student', 'Teacher', 'Parent'] as const).map((r) => (
-                            <TouchableOpacity
-                                key={r}
-                                style={[styles.roleTab, role === r && styles.activeTab]}
-                                onPress={() => setRole(r)}
-                            >
-                                <Text style={[styles.roleTabText, role === r && styles.activeTabText]}>{r}</Text>
-                            </TouchableOpacity>
-                        ))}
+                        {/* Role Selector Tabs */}
+                        <View style={styles.roleTabs}>
+                            {(['Student', 'Teacher', 'Parent'] as const).map((r) => (
+                                <TouchableOpacity
+                                    key={r}
+                                    style={[styles.roleTab, role === r && styles.activeTab]}
+                                    onPress={() => setRole(r)}
+                                >
+                                    <Text style={[styles.roleTabText, role === r && styles.activeTabText]}>{r}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        <View style={styles.inputWrapper}>
+                            <Text style={styles.inputLabel}>{role} ID</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder={`Enter ${role.toLowerCase()} id`}
+                                placeholderTextColor="#94A3B8"
+                                value={email}
+                                onChangeText={setEmail}
+                                autoCapitalize="none"
+                            />
+                        </View>
+
+                        <View style={styles.inputWrapper}>
+                            <Text style={styles.inputLabel}>Password</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="••••••••"
+                                placeholderTextColor="#94A3B8"
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                            />
+                        </View>
+
+                        <TouchableOpacity style={styles.forgotBtn}>
+                            <Text style={styles.forgotText}>Forgot password?</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.loginBtn}
+                            onPress={handleLogin}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.loginBtnText}>Login as {role}</Text>
+                        </TouchableOpacity>
+
+                        <View style={styles.divider}>
+                            <View style={styles.line} />
+                            <Text style={styles.dividerText}>SECURE ACCESS</Text>
+                            <View style={styles.line} />
+                        </View>
+
+                        <TouchableOpacity style={styles.supportBtn}>
+                            <Text style={styles.supportText}>Need Help? <Text style={styles.blueLink}>Contact Coordinator</Text></Text>
+                        </TouchableOpacity>
                     </View>
-
-                    <View style={styles.inputWrapper}>
-                        <Text style={styles.inputLabel}>{role} ID</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={`Enter ${role.toLowerCase()} id`}
-                            placeholderTextColor="#94A3B8"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                        />
-                    </View>
-
-                    <View style={styles.inputWrapper}>
-                        <Text style={styles.inputLabel}>Password</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="••••••••"
-                            placeholderTextColor="#94A3B8"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry
-                        />
-                    </View>
-
-                    <TouchableOpacity style={styles.forgotBtn}>
-                        <Text style={styles.forgotText}>Forgot password?</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.loginBtn}
-                        onPress={handleLogin}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.loginBtnText}>Login as {role}</Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.divider}>
-                        <View style={styles.line} />
-                        <Text style={styles.dividerText}>SECURE ACCESS</Text>
-                        <View style={styles.line} />
-                    </View>
-
-                    <TouchableOpacity style={styles.supportBtn}>
-                        <Text style={styles.supportText}>Need Help? <Text style={styles.blueLink}>Contact Coordinator</Text></Text>
-                    </TouchableOpacity>
-                </View>
+                </ScrollView>
             </KeyboardAvoidingView>
 
             <View style={styles.bottomFooter}>
@@ -190,9 +196,9 @@ const styles = StyleSheet.create({
     formContainer: {
         backgroundColor: '#FFFFFF',
         borderTopRightRadius: 60,
-        flex: 1,
-        paddingHorizontal: 32,
-        paddingTop: 50,
+        paddingHorizontal: 28,
+        paddingTop: 30,
+        paddingBottom: 20,
     },
     welcomeText: {
         fontSize: 26,
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
     },
     forgotBtn: {
         alignSelf: 'flex-end',
-        marginBottom: 30,
+        marginBottom: 24,
     },
     forgotText: {
         color: '#4F46E5',
@@ -266,16 +272,17 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     loginBtn: {
-        height: 60,
+        height: 56,
         backgroundColor: '#4F46E5',
-        borderRadius: 20,
+        borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#4F46E5',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        elevation: 6,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 4,
+        marginTop: 10,
     },
     loginBtnText: {
         color: '#FFFFFF',

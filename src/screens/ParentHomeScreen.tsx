@@ -78,7 +78,24 @@ const ParentHomeScreen = ({ navigation }: any) => {
                 {/* Child Quick Actions */}
                 <View style={styles.catGrid}>
                     {childMenu.map((cat, i) => (
-                        <TouchableOpacity key={i} style={[styles.catCard, { backgroundColor: cat.bg, borderColor: cat.border }]}>
+                        <TouchableOpacity
+                            key={i}
+                            style={[styles.catCard, { backgroundColor: cat.bg, borderColor: cat.border }]}
+                            onPress={() => {
+                                if (cat.name === 'Fee Pay') {
+                                    navigation.navigate('ParentFees');
+                                }
+                                if (cat.name === 'Diary') {
+                                    navigation.navigate('ParentDiary');
+                                }
+                                if (cat.name === 'Leave') {
+                                    navigation.navigate('ParentLeave');
+                                }
+                                if (cat.name === 'Health') {
+                                    navigation.navigate('ParentHealth');
+                                }
+                            }}
+                        >
                             <Text style={styles.catIcon}>{cat.icon}</Text>
                             <Text style={styles.catName}>{cat.name}</Text>
                         </TouchableOpacity>
@@ -139,11 +156,12 @@ const styles = StyleSheet.create({
     },
     headerBackground: {
         backgroundColor: '#4F46E5',
-        height: 220,
-        paddingTop: 20,
+        paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 20) + 15 : 20,
+        paddingBottom: 60,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
         paddingHorizontal: 24,
+        zIndex: 10,
     },
     headerContent: {
         flexDirection: 'row',
@@ -233,8 +251,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F1F5F9',
     },
     scrollArea: {
-        paddingTop: 60,
+        paddingTop: 80,
         paddingHorizontal: 24,
+        zIndex: 1,
     },
     catGrid: {
         flexDirection: 'row',
@@ -242,11 +261,15 @@ const styles = StyleSheet.create({
         marginBottom: 28,
     },
     catCard: {
-        width: (width - 48 - 36) / 4,
+        width: (width - 48 - 40) / 4,
         paddingVertical: 18,
         borderRadius: 22,
         alignItems: 'center',
         borderWidth: 1.5,
+        ...Platform.select({
+            ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10 },
+            android: { elevation: 2 },
+        }),
     },
     catIcon: {
         fontSize: 22,

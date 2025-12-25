@@ -11,6 +11,15 @@ import ExamsScreen from '../screens/ExamsScreen';
 import FeesScreen from '../screens/FeesScreen';
 import LibraryScreen from '../screens/LibraryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import CalendarScreen from '../screens/CalendarScreen';
+import TeacherPaymentScreen from '../screens/TeacherPaymentScreen';
+import TeacherSyllabusScreen from '../screens/TeacherSyllabusScreen';
+import TeacherAssignmentScreen from '../screens/TeacherAssignmentScreen';
+import TeacherAttendanceScreen from '../screens/TeacherAttendanceScreen';
+import ParentFeeScreen from '../screens/ParentFeeScreen';
+import ParentLeaveScreen from '../screens/ParentLeaveScreen';
+import ParentHealthScreen from '../screens/ParentHealthScreen';
+import ParentDiaryScreen from '../screens/ParentDiaryScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -23,7 +32,16 @@ export type RootStackParamList = {
   Exams: undefined;
   Fees: undefined;
   Library: undefined;
+  Calendar: undefined;
   Profile: { userId: string };
+  TeacherPayments: undefined;
+  TeacherSyllabus: undefined;
+  TeacherAssignments: undefined;
+  TeacherAttendance: undefined;
+  ParentFees: undefined;
+  ParentLeave: undefined;
+  ParentHealth: undefined;
+  ParentDiary: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -44,7 +62,16 @@ const RootNavigator = () => {
       <Stack.Screen name="Exams" component={ExamsScreen} />
       <Stack.Screen name="Fees" component={FeesScreen} />
       <Stack.Screen name="Library" component={LibraryScreen} />
+      <Stack.Screen name="Calendar" component={CalendarScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="TeacherPayments" component={TeacherPaymentScreen} />
+      <Stack.Screen name="TeacherSyllabus" component={TeacherSyllabusScreen} />
+      <Stack.Screen name="TeacherAssignments" component={TeacherAssignmentScreen} />
+      <Stack.Screen name="TeacherAttendance" component={TeacherAttendanceScreen} />
+      <Stack.Screen name="ParentFees" component={ParentFeeScreen} />
+      <Stack.Screen name="ParentLeave" component={ParentLeaveScreen} />
+      <Stack.Screen name="ParentHealth" component={ParentHealthScreen} />
+      <Stack.Screen name="ParentDiary" component={ParentDiaryScreen} />
     </Stack.Navigator>
   );
 };
