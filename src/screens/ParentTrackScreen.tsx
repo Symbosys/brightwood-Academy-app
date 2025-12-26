@@ -94,195 +94,199 @@ const ParentTrackScreen = ({ navigation }: any) => {
                 </View>
             </View>
 
-            {/* Map Placeholder */}
-            <View style={styles.mapContainer}>
-                <View style={styles.mapPlaceholder}>
-                    <Text style={styles.mapIcon}>🗺️</Text>
-                    <Text style={styles.mapTitle}>Live Bus Location</Text>
-                    <View style={styles.locationInfo}>
-                        <Text style={styles.locationIcon}>📍</Text>
-                        <Text style={styles.locationText}>{busStatus.currentLocation}</Text>
-                    </View>
-                    <View style={styles.etaBadge}>
-                        <Text style={styles.etaText}>ETA: {busStatus.estimatedArrival}</Text>
-                    </View>
-                </View>
 
-                {/* Quick Stats Overlay */}
-                <View style={styles.quickStats}>
-                    <View style={styles.statItem}>
-                        <Text style={styles.statIcon}>🚌</Text>
-                        <Text style={styles.statValue}>{busInfo.busNumber}</Text>
-                    </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                        <Text style={styles.statIcon}>⚡</Text>
-                        <Text style={styles.statValue}>{busStatus.speed}</Text>
-                    </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                        <Text style={styles.statIcon}>👥</Text>
-                        <Text style={styles.statValue}>{busStatus.studentsOnBoard}</Text>
-                    </View>
-                </View>
-            </View>
 
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollBody}
             >
-                {/* Student Info Card */}
-                <View style={styles.studentCard}>
-                    <View style={styles.studentHeader}>
-                        <View style={styles.studentAvatar}>
-                            <Text style={styles.studentAvatarText}>ET</Text>
+                {/* Map Placeholder Moved Inside ScrollView */}
+                <View style={styles.mapContainer}>
+                    <View style={styles.mapPlaceholder}>
+                        <Text style={styles.mapIcon}>🗺️</Text>
+                        <Text style={styles.mapTitle}>Live Bus Location</Text>
+                        <View style={styles.locationInfo}>
+                            <Text style={styles.locationIcon}>📍</Text>
+                            <Text style={styles.locationText}>{busStatus.currentLocation}</Text>
                         </View>
-                        <View style={styles.studentInfo}>
-                            <Text style={styles.studentName}>{studentInfo.name}</Text>
-                            <Text style={styles.studentMeta}>{studentInfo.grade} • Seat {studentInfo.seatNumber}</Text>
-                        </View>
-                        <View style={styles.onBoardBadge}>
-                            <Text style={styles.onBoardText}>On Board</Text>
+                        <View style={styles.etaBadge}>
+                            <Text style={styles.etaText}>ETA: {busStatus.estimatedArrival}</Text>
                         </View>
                     </View>
-                    <View style={styles.studentDetails}>
-                        <View style={styles.detailRow}>
-                            <Text style={styles.detailIcon}>📍</Text>
-                            <View style={styles.detailInfo}>
-                                <Text style={styles.detailLabel}>Pickup Point</Text>
-                                <Text style={styles.detailValue}>{studentInfo.pickupPoint}</Text>
+
+                    {/* Quick Stats Overlay */}
+                    <View style={styles.quickStats}>
+                        <View style={styles.statItem}>
+                            <Text style={styles.statIcon}>🚌</Text>
+                            <Text style={styles.statValue}>{busInfo.busNumber}</Text>
+                        </View>
+                        <View style={styles.statDivider} />
+                        <View style={styles.statItem}>
+                            <Text style={styles.statIcon}>⚡</Text>
+                            <Text style={styles.statValue}>{busStatus.speed}</Text>
+                        </View>
+                        <View style={styles.statDivider} />
+                        <View style={styles.statItem}>
+                            <Text style={styles.statIcon}>👥</Text>
+                            <Text style={styles.statValue}>{busStatus.studentsOnBoard}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.contentSection}>
+                    {/* Student Info Card */}
+                    <View style={styles.studentCard}>
+                        <View style={styles.studentHeader}>
+                            <View style={styles.studentAvatar}>
+                                <Text style={styles.studentAvatarText}>ET</Text>
                             </View>
-                            <Text style={styles.detailTime}>{studentInfo.pickupTime}</Text>
+                            <View style={styles.studentInfo}>
+                                <Text style={styles.studentName}>{studentInfo.name}</Text>
+                                <Text style={styles.studentMeta}>{studentInfo.grade} • Seat {studentInfo.seatNumber}</Text>
+                            </View>
+                            <View style={styles.onBoardBadge}>
+                                <Text style={styles.onBoardText}>On Board</Text>
+                            </View>
+                        </View>
+                        <View style={styles.studentDetails}>
+                            <View style={styles.detailRow}>
+                                <Text style={styles.detailIcon}>📍</Text>
+                                <View style={styles.detailInfo}>
+                                    <Text style={styles.detailLabel}>Pickup Point</Text>
+                                    <Text style={styles.detailValue}>{studentInfo.pickupPoint}</Text>
+                                </View>
+                                <Text style={styles.detailTime}>{studentInfo.pickupTime}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                {/* Upcoming Stops */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Upcoming Stops</Text>
-                    <Text style={styles.stopsCount}>{upcomingStops.length} stops</Text>
-                </View>
+                    {/* Upcoming Stops */}
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Upcoming Stops</Text>
+                        <Text style={styles.stopsCount}>{upcomingStops.length} stops</Text>
+                    </View>
 
-                {upcomingStops.map((stop, i) => (
-                    <View
-                        key={i}
-                        style={[
-                            styles.stopCard,
-                            stop.isStudentStop && styles.studentStopCard
-                        ]}
-                    >
-                        <View style={styles.stopIndicator}>
-                            <View style={[
-                                styles.stopDot,
-                                stop.status === 'final' && styles.finalStopDot,
-                                stop.isStudentStop && styles.studentStopDot
-                            ]} />
-                            {i < upcomingStops.length - 1 && <View style={styles.stopLine} />}
-                        </View>
-                        <View style={styles.stopContent}>
-                            <View style={styles.stopHeader}>
-                                <Text style={styles.stopName}>{stop.name}</Text>
-                                {stop.isStudentStop && (
-                                    <View style={styles.yourStopBadge}>
-                                        <Text style={styles.yourStopText}>YOUR STOP</Text>
+                    {upcomingStops.map((stop, i) => (
+                        <View
+                            key={i}
+                            style={[
+                                styles.stopCard,
+                                stop.isStudentStop && styles.studentStopCard
+                            ]}
+                        >
+                            <View style={styles.stopIndicator}>
+                                <View style={[
+                                    styles.stopDot,
+                                    stop.status === 'final' && styles.finalStopDot,
+                                    stop.isStudentStop && styles.studentStopDot
+                                ]} />
+                                {i < upcomingStops.length - 1 && <View style={styles.stopLine} />}
+                            </View>
+                            <View style={styles.stopContent}>
+                                <View style={styles.stopHeader}>
+                                    <Text style={styles.stopName}>{stop.name}</Text>
+                                    {stop.isStudentStop && (
+                                        <View style={styles.yourStopBadge}>
+                                            <Text style={styles.yourStopText}>YOUR STOP</Text>
+                                        </View>
+                                    )}
+                                </View>
+                                <View style={styles.stopMeta}>
+                                    <View style={styles.stopMetaItem}>
+                                        <Text style={styles.stopMetaIcon}>⏱️</Text>
+                                        <Text style={styles.stopMetaText}>{stop.eta}</Text>
                                     </View>
-                                )}
-                            </View>
-                            <View style={styles.stopMeta}>
-                                <View style={styles.stopMetaItem}>
-                                    <Text style={styles.stopMetaIcon}>⏱️</Text>
-                                    <Text style={styles.stopMetaText}>{stop.eta}</Text>
+                                    <View style={styles.stopMetaItem}>
+                                        <Text style={styles.stopMetaIcon}>📏</Text>
+                                        <Text style={styles.stopMetaText}>{stop.distance}</Text>
+                                    </View>
+                                    <View style={styles.stopMetaItem}>
+                                        <Text style={styles.stopMetaIcon}>👥</Text>
+                                        <Text style={styles.stopMetaText}>{stop.students} students</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.stopMetaItem}>
-                                    <Text style={styles.stopMetaIcon}>📏</Text>
-                                    <Text style={styles.stopMetaText}>{stop.distance}</Text>
-                                </View>
-                                <View style={styles.stopMetaItem}>
-                                    <Text style={styles.stopMetaIcon}>👥</Text>
-                                    <Text style={styles.stopMetaText}>{stop.students} students</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                ))}
-
-                {/* Bus Information */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Bus Information</Text>
-                </View>
-
-                <View style={styles.busInfoCard}>
-                    <View style={styles.busInfoRow}>
-                        <Text style={styles.busInfoLabel}>Bus Number</Text>
-                        <Text style={styles.busInfoValue}>{busInfo.busNumber}</Text>
-                    </View>
-                    <View style={styles.busInfoRow}>
-                        <Text style={styles.busInfoLabel}>Route</Text>
-                        <Text style={styles.busInfoValue}>{busInfo.route}</Text>
-                    </View>
-                    <View style={styles.busInfoRow}>
-                        <Text style={styles.busInfoLabel}>Driver</Text>
-                        <View style={styles.contactInfo}>
-                            <Text style={styles.busInfoValue}>{busInfo.driver}</Text>
-                            <TouchableOpacity style={styles.callBtn}>
-                                <Text style={styles.callBtnText}>📞 Call</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={styles.busInfoRow}>
-                        <Text style={styles.busInfoLabel}>Attendant</Text>
-                        <View style={styles.contactInfo}>
-                            <Text style={styles.busInfoValue}>{busInfo.attendant}</Text>
-                            <TouchableOpacity style={styles.callBtn}>
-                                <Text style={styles.callBtnText}>📞 Call</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-                {/* Safety Features */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Safety Features</Text>
-                </View>
-
-                <View style={styles.safetyGrid}>
-                    {safetyFeatures.map((feature, i) => (
-                        <View key={i} style={styles.safetyCard}>
-                            <Text style={styles.safetyIcon}>{feature.icon}</Text>
-                            <Text style={styles.safetyName}>{feature.name}</Text>
-                            <View style={styles.safetyStatusBadge}>
-                                <Text style={styles.safetyStatus}>{feature.status}</Text>
                             </View>
                         </View>
                     ))}
-                </View>
 
-                {/* Recent Updates */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Recent Updates</Text>
-                </View>
+                    {/* Bus Information */}
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Bus Information</Text>
+                    </View>
 
-                <View style={styles.updatesSection}>
-                    {recentUpdates.map((update, i) => (
-                        <View key={i} style={styles.updateCard}>
-                            <View style={[styles.updateIcon, { backgroundColor: update.color + '15' }]}>
-                                <Text style={styles.updateIconText}>{update.icon}</Text>
-                            </View>
-                            <View style={styles.updateContent}>
-                                <Text style={styles.updateMessage}>{update.message}</Text>
-                                <Text style={styles.updateTime}>{update.time}</Text>
+                    <View style={styles.busInfoCard}>
+                        <View style={styles.busInfoRow}>
+                            <Text style={styles.busInfoLabel}>Bus Number</Text>
+                            <Text style={styles.busInfoValue}>{busInfo.busNumber}</Text>
+                        </View>
+                        <View style={styles.busInfoRow}>
+                            <Text style={styles.busInfoLabel}>Route</Text>
+                            <Text style={styles.busInfoValue}>{busInfo.route}</Text>
+                        </View>
+                        <View style={styles.busInfoRow}>
+                            <Text style={styles.busInfoLabel}>Driver</Text>
+                            <View style={styles.contactInfo}>
+                                <Text style={styles.busInfoValue}>{busInfo.driver}</Text>
+                                <TouchableOpacity style={styles.callBtn}>
+                                    <Text style={styles.callBtnText}>📞 Call</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                    ))}
+                        <View style={styles.busInfoRow}>
+                            <Text style={styles.busInfoLabel}>Attendant</Text>
+                            <View style={styles.contactInfo}>
+                                <Text style={styles.busInfoValue}>{busInfo.attendant}</Text>
+                                <TouchableOpacity style={styles.callBtn}>
+                                    <Text style={styles.callBtnText}>📞 Call</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* Safety Features */}
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Safety Features</Text>
+                    </View>
+
+                    <View style={styles.safetyGrid}>
+                        {safetyFeatures.map((feature, i) => (
+                            <View key={i} style={styles.safetyCard}>
+                                <Text style={styles.safetyIcon}>{feature.icon}</Text>
+                                <Text style={styles.safetyName}>{feature.name}</Text>
+                                <View style={styles.safetyStatusBadge}>
+                                    <Text style={styles.safetyStatus}>{feature.status}</Text>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
+
+                    {/* Recent Updates */}
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>Recent Updates</Text>
+                    </View>
+
+                    <View style={styles.updatesSection}>
+                        {recentUpdates.map((update, i) => (
+                            <View key={i} style={styles.updateCard}>
+                                <View style={[styles.updateIcon, { backgroundColor: update.color + '15' }]}>
+                                    <Text style={styles.updateIconText}>{update.icon}</Text>
+                                </View>
+                                <View style={styles.updateContent}>
+                                    <Text style={styles.updateMessage}>{update.message}</Text>
+                                    <Text style={styles.updateTime}>{update.time}</Text>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
+
+                    {/* Emergency Contact */}
+                    <TouchableOpacity style={styles.emergencyBtn}>
+                        <Text style={styles.emergencyIcon}>🚨</Text>
+                        <Text style={styles.emergencyText}>Report Emergency</Text>
+                    </TouchableOpacity>
+
+                    <View style={{ height: 40 }} />
                 </View>
-
-                {/* Emergency Contact */}
-                <TouchableOpacity style={styles.emergencyBtn}>
-                    <Text style={styles.emergencyIcon}>🚨</Text>
-                    <Text style={styles.emergencyText}>Report Emergency</Text>
-                </TouchableOpacity>
-
-                <View style={{ height: 40 }} />
             </ScrollView>
         </SafeAreaView>
     );
@@ -371,6 +375,7 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         position: 'relative',
+        marginTop: -20,
     },
     mapPlaceholder: {
         height: 320,
@@ -457,14 +462,17 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     scrollBody: {
-        paddingTop: 60,
-        paddingHorizontal: 24,
+        paddingTop: 0,
         zIndex: 1,
+    },
+    contentSection: {
+        paddingHorizontal: 24,
+        paddingTop: 30,
     },
     studentCard: {
         backgroundColor: '#FFFFFF',
         borderRadius: 24,
-        padding: 20,
+        padding: 12,
         marginBottom: 20,
         borderWidth: 1,
         borderColor: '#F1F5F9',
@@ -473,8 +481,8 @@ const styles = StyleSheet.create({
     studentHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 16,
-        paddingBottom: 16,
+        marginBottom: 8,
+        paddingBottom: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#F1F5F9',
     },

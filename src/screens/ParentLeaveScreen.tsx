@@ -198,10 +198,11 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#4F46E5',
         paddingTop: Platform.OS === 'ios' ? 10 : 20,
-        paddingBottom: 60,
+        paddingBottom: 70,
         paddingHorizontal: 24,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
+        zIndex: 10,
     },
     headerTop: {
         flexDirection: 'row',
@@ -260,6 +261,7 @@ const styles = StyleSheet.create({
     scrollBody: {
         paddingTop: 0,
         paddingHorizontal: 24,
+        zIndex: 1,
     },
     statsContainer: {
         backgroundColor: '#FFFFFF',
@@ -267,13 +269,14 @@ const styles = StyleSheet.create({
         padding: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: -35,
+        marginTop: 30,
         elevation: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.1,
         shadowRadius: 15,
         marginBottom: 25,
+        zIndex: 5,
     },
     statBox: {
         flex: 1,

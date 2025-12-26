@@ -27,10 +27,10 @@ const ParentHomeScreen = ({ navigation }: any) => {
     ];
 
     const childMenu = [
-        { name: 'Fee Pay', icon: '💳', bg: '#FDF2F8', border: '#FCE7F3' },
-        { name: 'Diary', icon: '📔', bg: '#F0FDF4', border: '#BBF7D0' },
-        { name: 'Leave', icon: '✉️', bg: '#EEF2FF', border: '#C7D2FE' },
-        { name: 'Health', icon: '🩺', bg: '#FFF7ED', border: '#FED7AA' },
+        { name: 'Fee Pay', icon: '💳', bg: '#FDF2F8', border: '#FCE7F3', badge: null },
+        { name: 'Diary', icon: '📔', bg: '#F0FDF4', border: '#BBF7D0', badge: null },
+        { name: 'Leave', icon: '✉️', bg: '#EEF2FF', border: '#C7D2FE', badge: 2 },
+        { name: 'Health', icon: '🩺', bg: '#FFF7ED', border: '#FED7AA', badge: null },
     ];
 
     return (
@@ -96,7 +96,14 @@ const ParentHomeScreen = ({ navigation }: any) => {
                                 }
                             }}
                         >
-                            <Text style={styles.catIcon}>{cat.icon}</Text>
+                            <View>
+                                <Text style={styles.catIcon}>{cat.icon}</Text>
+                                {cat.badge && cat.badge > 0 && (
+                                    <View style={styles.badgeDot}>
+                                        <Text style={styles.badgeText}>{cat.badge}</Text>
+                                    </View>
+                                )}
+                            </View>
                             <Text style={styles.catName}>{cat.name}</Text>
                         </TouchableOpacity>
                     ))}
@@ -283,6 +290,24 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#475569',
         textTransform: 'uppercase',
+    },
+    badgeDot: {
+        position: 'absolute',
+        top: -4,
+        right: -4,
+        backgroundColor: '#EF4444',
+        borderRadius: 10,
+        minWidth: 18,
+        height: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
+    },
+    badgeText: {
+        color: '#FFFFFF',
+        fontSize: 10,
+        fontWeight: '900',
     },
     trackingBanner: {
         backgroundColor: '#F1F5F9',
