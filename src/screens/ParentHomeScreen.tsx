@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -14,17 +14,32 @@ import {
 
 const { width } = Dimensions.get('window');
 
-const ParentHomeScreen = ({ navigation }: any) => {
+const ParentHomeScreen = ({ navigation, route }: any) => {
     const childStats = [
         { label: 'Attendance', val: '94%', color: '#10B981' },
         { label: 'Fee Status', val: 'Due', color: '#F59E0B' },
         { label: 'Avg Mark', val: '88/100', color: '#4F46E5' },
     ];
 
-    const alerts = [
+    const [activeAlerts, setActiveAlerts] = useState([
         { title: 'New Marksheet Released', time: '2h ago', body: 'The monthly test results for Grade 10-B have been published.', type: 'Academic' },
         { title: 'Bus Running Late', time: '10m ago', body: 'Route 101 is delayed by 15 minutes due to traffic.', type: 'Transport' },
-    ];
+    ]);
+
+    useEffect(() => {
+        if (route.params?.paymentSuccess) {
+            const newAlert = {
+                title: 'Payment Successful',
+                time: 'Just now',
+                body: `Total payment of ${route.params.amount} has been processed successfully.`,
+                type: 'Finance'
+            };
+            setActiveAlerts(prev => [newAlert, ...prev]);
+            // Clear params to prevent duplicate alerts on re-render if needed, 
+            // but for this simple implementation we'll leave it or user can clear it.
+            navigation.setParams({ paymentSuccess: undefined });
+        }
+    }, [route.params]);
 
     const childMenu = [
         { name: 'Fee Pay', icon: '💳', bg: '#FDF2F8', border: '#FCE7F3', badge: null },
@@ -131,7 +146,7 @@ const ParentHomeScreen = ({ navigation }: any) => {
                     <Text style={styles.sectionTitle}>Child Activity Feed</Text>
                 </View>
 
-                {alerts.map((item, i) => (
+                {activeAlerts.map((item, i) => (
                     <View key={i} style={styles.alertCard}>
                         <View style={styles.alertHeader}>
                             <Text style={styles.alertType}>{item.type}</Text>
@@ -143,7 +158,10 @@ const ParentHomeScreen = ({ navigation }: any) => {
                 ))}
 
                 {/* Contact Teacher PW Vibe */}
-                <TouchableOpacity style={styles.messageBanner}>
+                <TouchableOpacity
+                    style={styles.messageBanner}
+                    onPress={() => navigation.navigate('ParentChat')}
+                >
                     <View style={styles.pills}>
                         <View style={styles.pill} />
                         <View style={styles.pill} />

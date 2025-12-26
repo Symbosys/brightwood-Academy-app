@@ -186,7 +186,16 @@ const ParentFeeScreen = ({ navigation }: any) => {
             </ScrollView>
 
             <View style={styles.bottomBar}>
-                <TouchableOpacity style={styles.mainPayBtn}>
+                <TouchableOpacity
+                    style={styles.mainPayBtn}
+                    onPress={() => {
+                        // Simulate payment processing
+                        navigation.navigate('ParentHome', {
+                            paymentSuccess: true,
+                            amount: '$1,700.00'
+                        });
+                    }}
+                >
                     <Text style={styles.mainPayBtnTxt}>PAY TOTAL $1,700.00</Text>
                 </TouchableOpacity>
             </View>

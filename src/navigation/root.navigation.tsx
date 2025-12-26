@@ -26,6 +26,7 @@ import TeacherGuardianScreen from '../screens/TeacherGuardianScreen';
 import TeacherTransportScreen from '../screens/TeacherTransportScreen';
 import TeacherFeeHistoryScreen from '../screens/TeacherFeeHistoryScreen';
 import ParentTrackScreen from '../screens/ParentTrackScreen';
+import ParentChatScreen from '../screens/ParentChatScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -54,6 +55,7 @@ export type RootStackParamList = {
   TeacherTransport: undefined;
   TeacherFeeHistory: undefined;
   ParentTrack: undefined;
+  ParentChat: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -90,6 +92,7 @@ const RootNavigator = () => {
       <Stack.Screen name="TeacherTransport" component={TeacherTransportScreen} />
       <Stack.Screen name="TeacherFeeHistory" component={TeacherFeeHistoryScreen} />
       <Stack.Screen name="ParentTrack" component={ParentTrackScreen} />
+      <Stack.Screen name="ParentChat" component={ParentChatScreen} />
     </Stack.Navigator>
   );
 };
