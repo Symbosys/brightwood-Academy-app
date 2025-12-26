@@ -90,13 +90,17 @@ const StudentHomeScreen = ({ navigation }: any) => {
                             key={i}
                             style={styles.gridItem}
                             onPress={() => {
-                                if (item.name === 'Homework') navigation.navigate('Homework');
-                                if (item.name === 'Attendance') navigation.navigate('Attendance');
-                                if (item.name === 'Remarks') navigation.navigate('Remarks');
-                                if (item.name === 'Exams') navigation.navigate('Exams');
-                                if (item.name === 'Fees') navigation.navigate('Fees');
-                                if (item.name === 'Library') navigation.navigate('Library');
-                                if (item.name === 'Calendar') navigation.navigate('Calendar');
+                                switch (item.name) {
+                                    case 'Homework': navigation.navigate('Homework'); break;
+                                    case 'Attendance': navigation.navigate('Attendance'); break;
+                                    case 'Remarks': navigation.navigate('Remarks'); break;
+                                    case 'Exams': navigation.navigate('Exams'); break;
+                                    case 'Fees': navigation.navigate('Fees'); break;
+                                    case 'Library': navigation.navigate('Library'); break;
+                                    case 'Calendar': navigation.navigate('Calendar'); break;
+                                    case 'More': /* Handle More */ break;
+                                    default: console.log('Unknown navigation:', item.name);
+                                }
                             }}
                         >
                             <View style={[styles.iconBox, { backgroundColor: item.bg }]}>
@@ -110,7 +114,9 @@ const StudentHomeScreen = ({ navigation }: any) => {
                 {/* 2. Notice Board - School Style */}
                 <View style={styles.sectionHeader}>
                     <Text style={styles.sectionTitle}>Notice Board</Text>
-                    <TouchableOpacity><Text style={styles.viewAll}>Read All</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('StudentNotices')}>
+                        <Text style={styles.viewAll}>Read All</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.noticeContainer}>

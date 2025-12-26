@@ -41,7 +41,7 @@ const AttendanceScreen = ({ navigation }: any) => {
                         <Text style={styles.backIcon}>←</Text>
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>Attendance</Text>
-                    <TouchableOpacity style={styles.leaveBtn}>
+                    <TouchableOpacity style={styles.leaveBtn} onPress={() => navigation.navigate('StudentLeave')}>
                         <Text style={styles.leaveBtnTxt}>Apply Leave</Text>
                     </TouchableOpacity>
                 </View>

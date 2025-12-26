@@ -2,6 +2,9 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import StudentHomeScreen from '../screens/StudentHomeScreen';
+import StudentNoticesScreen from '../screens/StudentNoticesScreen';
+import NoticeDetailScreen from '../screens/NoticeDetailScreen';
+import StudentLeaveScreen from '../screens/StudentLeaveScreen';
 import TeacherHomeScreen from '../screens/TeacherHomeScreen';
 import ParentHomeScreen from '../screens/ParentHomeScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
@@ -31,6 +34,9 @@ import ParentChatScreen from '../screens/ParentChatScreen';
 export type RootStackParamList = {
   Login: undefined;
   StudentHome: undefined;
+  StudentNotices: undefined;
+  NoticeDetail: { notice: any };
+  StudentLeave: undefined;
   TeacherHome: undefined;
   ParentHome: undefined;
   Homework: undefined;
@@ -68,6 +74,9 @@ const RootNavigator = () => {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="StudentHome" component={StudentHomeScreen} />
+      <Stack.Screen name="StudentNotices" component={StudentNoticesScreen} />
+      <Stack.Screen name="NoticeDetail" component={NoticeDetailScreen} />
+      <Stack.Screen name="StudentLeave" component={StudentLeaveScreen} />
       <Stack.Screen name="TeacherHome" component={TeacherHomeScreen} />
       <Stack.Screen name="ParentHome" component={ParentHomeScreen} />
       <Stack.Screen name="Homework" component={HomeworkScreen} />
