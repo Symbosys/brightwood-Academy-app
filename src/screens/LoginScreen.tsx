@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -8,54 +8,101 @@ import {
     KeyboardAvoidingView,
     Platform,
     Dimensions,
-    SafeAreaView,
     StatusBar,
-    Image,
     ScrollView,
+    Alert,
+    ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../api/apiclient';
+import DatePicker from 'react-native-date-picker';
 
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }: any) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [loginId, setLoginId] = useState('');
+    const [password, setPassword] = useState(''); // This will store the formatted Date string
     const [role, setRole] = useState<'Student' | 'Teacher' | 'Parent'>('Student');
+    const [loading, setLoading] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [open, setOpen] = useState(false);
 
-    const handleLogin = () => {
-        if (role === 'Student') navigation.navigate('StudentHome');
-        else if (role === 'Teacher') navigation.navigate('TeacherHome');
-        else navigation.navigate('ParentHome');
+    // Reset fields when role changes
+    useEffect(() => {
+        setLoginId('');
+        setPassword('');
+        setDate(new Date());
+    }, [role]);
+
+    // Format date as DDMMYYYY for the password state
+    const handleConfirmDate = (selectedDate: Date) => {
+        setOpen(false);
+        setDate(selectedDate);
+
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const year = selectedDate.getFullYear();
+
+        // This sets the 'password' field to the date string
+        setPassword(`${day}${month}${year}`);
+    };
+
+    const handleLogin = async () => {
+        if (!loginId || !password) {
+            const dateType = role === 'Teacher' ? 'Joining Date' : 'Date of Birth';
+            Alert.alert('Missing Details', `Please enter your ID and select your ${dateType}.`);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const endpoint = role.toLowerCase();
+            const payloadKey = role === 'Student' ? 'loginId' : (role === 'Teacher' ? 'teacherLoginId' : 'parentsLoginId');
+
+            // API receives the date string (DDMMYYYY) in the password field
+            const response = await api.post(`${endpoint}/login`, {
+                [payloadKey]: loginId,
+                password: password
+            });
+
+            const result = response.data;
+            await AsyncStorage.setItem('userToken', result.data.token);
+            await AsyncStorage.setItem('userRole', role);
+            await AsyncStorage.setItem('userData', JSON.stringify(result.data.user || result.data.student));
+
+            if (role === 'Student') navigation.navigate('StudentHome');
+            else if (role === 'Teacher') navigation.navigate('TeacherHome');
+            else navigation.navigate('ParentHome');
+
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+            Alert.alert('Login Failed', errorMessage);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#4F46E5" />
 
-            {/* Top Branding Section */}
             <View style={styles.topSection}>
-                <View style={styles.circle1} />
-                <View style={styles.circle2} />
+                <View style={styles.circle1} /><View style={styles.circle2} />
                 <View style={styles.brandingContent}>
-                    <View style={styles.logoBox}>
-                        <Text style={styles.logoLetter}>B</Text>
-                    </View>
+                    <View style={styles.logoBox}><Text style={styles.logoLetter}>B</Text></View>
                     <Text style={styles.brandName}>Symbosys</Text>
                     <Text style={styles.brandTagline}>Shaping Tomorrow's Leaders</Text>
                 </View>
             </View>
 
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.formSection}>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                >
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.formSection}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.formContainer}>
                         <Text style={styles.welcomeText}>Login</Text>
                         <Text style={styles.instructText}>Choose your role and enter credentials.</Text>
 
-                        {/* Role Selector Tabs */}
+                        {/* Role Selector */}
                         <View style={styles.roleTabs}>
                             {(['Student', 'Teacher', 'Parent'] as const).map((r) => (
                                 <TouchableOpacity
@@ -68,58 +115,60 @@ const LoginScreen = ({ navigation }: any) => {
                             ))}
                         </View>
 
+                        {/* ID Input */}
                         <View style={styles.inputWrapper}>
                             <Text style={styles.inputLabel}>{role} ID</Text>
                             <TextInput
                                 style={styles.input}
-                                placeholder={`Enter ${role.toLowerCase()} id`}
+                                placeholder={`Enter ${role.toLowerCase()} ID`}
                                 placeholderTextColor="#94A3B8"
-                                value={email}
-                                onChangeText={setEmail}
+                                value={loginId}
+                                onChangeText={setLoginId}
                                 autoCapitalize="none"
                             />
                         </View>
 
+                        {/* Date Picker Button (Used for all roles now) */}
                         <View style={styles.inputWrapper}>
-                            <Text style={styles.inputLabel}>Password</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="••••••••"
-                                placeholderTextColor="#94A3B8"
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry
-                            />
+                            <Text style={styles.inputLabel}>
+                                {role === 'Teacher' ? 'Joining Date' : 'Date of Birth'}
+                            </Text>
+                            <TouchableOpacity
+                                style={[styles.input, { justifyContent: 'center' }]}
+                                onPress={() => setOpen(true)}
+                                activeOpacity={0.7}
+                            >
+                                <Text style={{ color: password ? '#1E293B' : '#94A3B8', fontSize: 16 }}>
+                                    {password
+                                        ? `${password.slice(0, 2)} / ${password.slice(2, 4)} / ${password.slice(4)}`
+                                        : role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
 
-                        <TouchableOpacity style={styles.forgotBtn}>
-                            <Text style={styles.forgotText}>Forgot password?</Text>
-                        </TouchableOpacity>
+                        <DatePicker
+                            modal
+                            mode="date"
+                            open={open}
+                            date={date}
+                            onConfirm={handleConfirmDate}
+                            onCancel={() => setOpen(false)}
+                            title={role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
+                            maximumDate={new Date()}
+                        />
 
                         <TouchableOpacity
-                            style={styles.loginBtn}
+                            style={[styles.loginBtn, loading && { opacity: 0.7 }]}
                             onPress={handleLogin}
-                            activeOpacity={0.8}
+                            disabled={loading}
                         >
-                            <Text style={styles.loginBtnText}>Login as {role}</Text>
+                            {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.loginBtnText}>Login as {role}</Text>}
                         </TouchableOpacity>
 
-                        <View style={styles.divider}>
-                            <View style={styles.line} />
-                            <Text style={styles.dividerText}>SECURE ACCESS</Text>
-                            <View style={styles.line} />
-                        </View>
-
-                        <TouchableOpacity style={styles.supportBtn}>
-                            <Text style={styles.supportText}>Need Help? <Text style={styles.blueLink}>Contact Coordinator</Text></Text>
-                        </TouchableOpacity>
+                        {/* Footer UI... */}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-
-            <View style={styles.bottomFooter}>
-                <Text style={styles.footerInfo}>Symbosys Education Systems • v1.0.4</Text>
-            </View>
         </SafeAreaView>
     );
 };
@@ -131,29 +180,28 @@ const styles = StyleSheet.create({
     },
     topSection: {
         height: height * 0.35,
-        backgroundColor: '#4F46E5', // Indigo-600 (PW Blue/Indigo vibe)
-        borderBottomLeftRadius: 60,
-        overflow: 'hidden',
+        backgroundColor: '#4F46E5',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden',
     },
     circle1: {
         position: 'absolute',
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        top: -100,
+        top: -50,
         right: -50,
-    },
-    circle2: {
-        position: 'absolute',
         width: 200,
         height: 200,
         borderRadius: 100,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    circle2: {
+        position: 'absolute',
+        bottom: -30,
+        left: -30,
+        width: 140,
+        height: 140,
+        borderRadius: 70,
         backgroundColor: 'rgba(255, 255, 255, 0.08)',
-        bottom: -50,
-        left: -50,
     },
     brandingContent: {
         alignItems: 'center',
@@ -162,61 +210,61 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         backgroundColor: '#FFFFFF',
-        borderRadius: 25,
+        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.2,
-        shadowRadius: 15,
-        elevation: 10,
+        marginBottom: 15,
+        ...Platform.select({
+            ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.2, shadowRadius: 15 },
+            android: { elevation: 15 },
+        }),
     },
     logoLetter: {
-        fontSize: 42,
+        fontSize: 40,
         fontWeight: '900',
         color: '#4F46E5',
     },
     brandName: {
         fontSize: 32,
-        fontWeight: '800',
+        fontWeight: '900',
         color: '#FFFFFF',
-        letterSpacing: -0.5,
+        letterSpacing: 1,
     },
     brandTagline: {
         fontSize: 14,
         color: 'rgba(255, 255, 255, 0.8)',
+        marginTop: 5,
         fontWeight: '500',
-        marginTop: 4,
     },
     formSection: {
         flex: 1,
-        marginTop: -40,
+        marginTop: -30,
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: 35,
+        borderTopRightRadius: 35,
+        paddingHorizontal: 25,
     },
     formContainer: {
-        backgroundColor: '#FFFFFF',
-        borderTopRightRadius: 60,
-        paddingHorizontal: 28,
-        paddingTop: 30,
+        paddingTop: 35,
         paddingBottom: 20,
     },
     welcomeText: {
-        fontSize: 26,
+        fontSize: 28,
         fontWeight: '800',
         color: '#1E293B',
     },
     instructText: {
         fontSize: 15,
         color: '#64748B',
-        marginTop: 6,
-        marginBottom: 20,
+        marginTop: 8,
+        marginBottom: 30,
     },
     roleTabs: {
         flexDirection: 'row',
         backgroundColor: '#F1F5F9',
+        borderRadius: 15,
         padding: 5,
-        borderRadius: 16,
-        marginBottom: 24,
+        marginBottom: 25,
     },
     roleTab: {
         flex: 1,
@@ -226,14 +274,13 @@ const styles = StyleSheet.create({
     },
     activeTab: {
         backgroundColor: '#FFFFFF',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
+        ...Platform.select({
+            ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
+            android: { elevation: 3 },
+        }),
     },
     roleTabText: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: '700',
         color: '#64748B',
     },
@@ -244,89 +291,38 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     inputLabel: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: '700',
         color: '#475569',
         marginBottom: 10,
         marginLeft: 4,
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
     },
     input: {
-        height: 58,
+        height: 55,
         backgroundColor: '#F8FAFC',
-        borderRadius: 18,
+        borderWidth: 1.5,
+        borderColor: '#E2E8F0',
+        borderRadius: 16,
         paddingHorizontal: 20,
         fontSize: 16,
         color: '#1E293B',
-        borderWidth: 1.5,
-        borderColor: '#F1F5F9',
-    },
-    forgotBtn: {
-        alignSelf: 'flex-end',
-        marginBottom: 24,
-    },
-    forgotText: {
-        color: '#4F46E5',
-        fontSize: 14,
-        fontWeight: '700',
     },
     loginBtn: {
-        height: 56,
+        height: 58,
         backgroundColor: '#4F46E5',
-        borderRadius: 16,
+        borderRadius: 18,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#4F46E5',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 4,
         marginTop: 10,
+        ...Platform.select({
+            ios: { shadowColor: '#4F46E5', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 15 },
+            android: { elevation: 8 },
+        }),
     },
     loginBtnText: {
-        color: '#FFFFFF',
         fontSize: 18,
         fontWeight: '800',
-    },
-    divider: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 32,
-    },
-    line: {
-        flex: 1,
-        height: 1,
-        backgroundColor: '#F1F5F9',
-    },
-    dividerText: {
-        marginHorizontal: 16,
-        fontSize: 11,
-        fontWeight: '800',
-        color: '#CBD5E1',
-        letterSpacing: 1,
-    },
-    supportBtn: {
-        alignItems: 'center',
-    },
-    supportText: {
-        color: '#64748B',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    blueLink: {
-        color: '#4F46E5',
-        fontWeight: '800',
-    },
-    bottomFooter: {
-        paddingVertical: 20,
-        alignItems: 'center',
-    },
-    footerInfo: {
-        fontSize: 10,
-        color: '#94A3B8',
-        fontWeight: '600',
-        letterSpacing: 0.5,
+        color: '#FFFFFF',
     },
 });
 
