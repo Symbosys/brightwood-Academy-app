@@ -55,7 +55,7 @@ const ParentHomeScreen = ({ navigation, route }: any) => {
             <View style={styles.headerBackground}>
                 <View style={styles.headerContent}>
                     <View>
-                        <Text style={styles.schoolName}>PARENT ACCESS • BRIGHTWOOD</Text>
+                        <Text style={styles.schoolName}>PARENT ACCESS • Symbosys</Text>
                         <Text style={styles.welcomeTitle}>Mr. Thompson</Text>
                         <View style={styles.childSwitcher}>
                             <Text style={styles.childInfo}>Child: Alex Thompson (Grade 10-B)</Text>

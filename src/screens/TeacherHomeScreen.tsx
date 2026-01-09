@@ -114,6 +114,44 @@ const TeacherHomeScreen = ({ navigation }: any) => {
                     </TouchableOpacity>
                 </View>
 
+                {/* My Attendance Session - Teacher Self Tracking */}
+                <View style={styles.sectionHead}>
+                    <Text style={styles.sectionTitle}>My Attendance</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('TeacherMyAttendance')}><Text style={styles.seeAll}>History</Text></TouchableOpacity>
+                </View>
+
+                <View style={styles.attendanceCard}>
+                    <View style={styles.attHeader}>
+                        <View style={styles.dateBadge}>
+                            <Text style={styles.dateText}>24</Text>
+                            <Text style={styles.monthText}>DEC</Text>
+                        </View>
+                        <View style={styles.attInfo}>
+                            <Text style={styles.attTitle}>General Shift</Text>
+                            <Text style={styles.attTime}>09:00 AM - 04:00 PM</Text>
+                        </View>
+                        <View style={[styles.statusTag, { backgroundColor: '#DEF7EC' }]}>
+                            <Text style={[styles.statusTagText, { color: '#03543F' }]}>Present</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.attDivider} />
+
+                    <View style={styles.attRow}>
+                        <View style={styles.attCol}>
+                            <Text style={styles.attLabel}>Check In</Text>
+                            <Text style={styles.attValue}>08:55 AM</Text>
+                        </View>
+                        <View style={styles.attCol}>
+                            <Text style={styles.attLabel}>Check Out</Text>
+                            <Text style={styles.attValue}>--:--</Text>
+                        </View>
+                        <TouchableOpacity style={styles.checkOutBtn}>
+                            <Text style={styles.checkOutBtnText}>Check Out</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
                 {/* Lectures Schedule */}
                 <View style={styles.sectionHead}>
                     <Text style={styles.sectionTitle}>Teaching Schedule</Text>
@@ -431,6 +469,100 @@ const styles = StyleSheet.create({
         color: '#94A3B8',
         fontWeight: '600',
         textAlign: 'center',
+    },
+    attendanceCard: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 24,
+        padding: 18,
+        marginBottom: 28,
+        borderWidth: 1,
+        borderColor: '#F1F5F9',
+        ...Platform.select({
+            ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10 },
+            android: { elevation: 3 },
+        }),
+    },
+    attHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    dateBadge: {
+        backgroundColor: '#F1F5F9',
+        borderRadius: 12,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        alignItems: 'center',
+        marginRight: 14,
+    },
+    dateText: {
+        fontSize: 16,
+        fontWeight: '900',
+        color: '#1E293B',
+    },
+    monthText: {
+        fontSize: 9,
+        fontWeight: '700',
+        color: '#64748B',
+    },
+    attInfo: {
+        flex: 1,
+    },
+    attTitle: {
+        fontSize: 14,
+        fontWeight: '800',
+        color: '#1E293B',
+    },
+    attTime: {
+        fontSize: 11,
+        color: '#64748B',
+        fontWeight: '600',
+        marginTop: 2,
+    },
+    statusTag: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 8,
+    },
+    statusTagText: {
+        fontSize: 10,
+        fontWeight: '800',
+    },
+    attDivider: {
+        height: 1,
+        backgroundColor: '#F1F5F9',
+        marginBottom: 16,
+    },
+    attRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    attCol: {
+        flex: 1,
+    },
+    attLabel: {
+        fontSize: 10,
+        color: '#94A3B8',
+        fontWeight: '700',
+        textTransform: 'uppercase',
+    },
+    attValue: {
+        fontSize: 15,
+        fontWeight: '800',
+        color: '#1E293B',
+        marginTop: 2,
+    },
+    checkOutBtn: {
+        backgroundColor: '#EF4444',
+        paddingHorizontal: 18,
+        paddingVertical: 10,
+        borderRadius: 12,
+    },
+    checkOutBtnText: {
+        fontSize: 12,
+        fontWeight: '800',
+        color: '#FFFFFF',
     }
 });
 

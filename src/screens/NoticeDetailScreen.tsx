@@ -79,7 +79,7 @@ const NoticeDetailScreen = ({ navigation, route }: any) => {
 
                     <View style={styles.signatureSection}>
                         <Text style={styles.signName}>Principal</Text>
-                        <Text style={styles.signTitle}>BrightWood Public School</Text>
+                        <Text style={styles.signTitle}>Symbosys Public School</Text>
                     </View>
                 </View>
             </ScrollView>

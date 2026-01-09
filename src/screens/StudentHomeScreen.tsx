@@ -18,13 +18,13 @@ const StudentHomeScreen = ({ navigation }: any) => {
     // School-specific categories
     const menuGrid = [
         { name: 'Attendance', icon: '�', color: '#6366F1', bg: '#EEF2FF' },
-        { name: 'Homework', icon: '📝', color: '#10B981', bg: '#ECFDF5' },
-        { name: 'Remarks', icon: '⭐', color: '#F59E0B', bg: '#FFFBEB' },
+
+
         { name: 'Exams', icon: '🏆', color: '#EF4444', bg: '#FEF2F2' },
         { name: 'Fees', icon: '�', color: '#8B5CF6', bg: '#F5F3FF' },
         { name: 'Library', icon: '📚', color: '#EC4899', bg: '#FDF2F8' },
         { name: 'Calendar', icon: '�️', color: '#06B6D4', bg: '#ECFEFF' },
-        { name: 'More', icon: '✨', color: '#64748B', bg: '#F8FAFC' },
+
     ];
 
     const todayTimetable = [
@@ -46,7 +46,7 @@ const StudentHomeScreen = ({ navigation }: any) => {
             <View style={styles.headerArea}>
                 <View style={styles.headerTop}>
                     <View>
-                        <Text style={styles.schoolBrand}>BRIGHTWOOD PUBLIC SCHOOL</Text>
+                        <Text style={styles.schoolBrand}>Symbosys PUBLIC SCHOOL</Text>
                         <Text style={styles.studentName}>Alex Thompson</Text>
                         <Text style={styles.studentMeta}>Class 10-B • Roll: 10245</Text>
                     </View>
@@ -91,14 +91,14 @@ const StudentHomeScreen = ({ navigation }: any) => {
                             style={styles.gridItem}
                             onPress={() => {
                                 switch (item.name) {
-                                    case 'Homework': navigation.navigate('Homework'); break;
+
                                     case 'Attendance': navigation.navigate('Attendance'); break;
-                                    case 'Remarks': navigation.navigate('Remarks'); break;
+
                                     case 'Exams': navigation.navigate('Exams'); break;
                                     case 'Fees': navigation.navigate('Fees'); break;
                                     case 'Library': navigation.navigate('Library'); break;
                                     case 'Calendar': navigation.navigate('Calendar'); break;
-                                    case 'More': /* Handle More */ break;
+
                                     default: console.log('Unknown navigation:', item.name);
                                 }
                             }}
@@ -161,30 +161,13 @@ const StudentHomeScreen = ({ navigation }: any) => {
                     </View>
                 ))}
 
-                {/* 4. Homework Highlights */}
-                <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Pending Homework</Text>
-                </View>
 
-                <View style={styles.homeworkCard}>
-                    <View style={styles.hwHeader}>
-                        <View style={styles.hwBadge}>
-                            <Text style={styles.hwBadgeTxt}>HIGH PRIORITY</Text>
-                        </View>
-                        <Text style={styles.hwDue}>Due Tomorrow</Text>
-                    </View>
-                    <Text style={styles.hwTitle}>Math: Quadratic Equations Worksheet</Text>
-                    <Text style={styles.hwDesc}>Complete problems 1-15 from Page 242 of your textbook.</Text>
-                    <TouchableOpacity style={styles.hwButton}>
-                        <Text style={styles.hwButtonTxt}>Mark as Completed</Text>
-                    </TouchableOpacity>
-                </View>
 
                 {/* 5. School Pride / Identity */}
                 <View style={styles.footerBranding}>
                     <Text style={styles.footerTxt}>Knowledge is Power</Text>
                     <View style={styles.brLine} />
-                    <Text style={styles.footerVer}>BrightWood Student Information System v2.0</Text>
+                    <Text style={styles.footerVer}>Symbosys Student Information System v2.0</Text>
                 </View>
 
                 <View style={{ height: 40 }} />

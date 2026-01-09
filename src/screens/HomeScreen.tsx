@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation }: any) => {
             <View style={styles.headerBackground}>
                 <View style={styles.headerContent}>
                     <View>
-                        <Text style={styles.schoolName}>BRIGHTWOOD PUBLIC SCHOOL</Text>
+                        <Text style={styles.schoolName}>Symbosys PUBLIC SCHOOL</Text>
                         <View style={styles.userRow}>
                             <Text style={styles.welcomeTitle}>Hi, Alex Thompson</Text>
                             <View style={styles.onlineDot} />
@@ -151,7 +151,7 @@ const HomeScreen = ({ navigation }: any) => {
 
                 {/* 5. School Insight Section */}
                 <View style={styles.insightSection}>
-                    <Text style={styles.insightTitle}>About BrightWood</Text>
+                    <Text style={styles.insightTitle}>About Symbosys</Text>
                     <View style={styles.insightGrid}>
                         <View style={styles.insightItem}>
                             <Text style={styles.insightIcon}>🏛️</Text>

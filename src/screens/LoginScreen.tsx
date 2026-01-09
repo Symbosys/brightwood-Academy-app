@@ -39,7 +39,7 @@ const LoginScreen = ({ navigation }: any) => {
                     <View style={styles.logoBox}>
                         <Text style={styles.logoLetter}>B</Text>
                     </View>
-                    <Text style={styles.brandName}>BrightWood</Text>
+                    <Text style={styles.brandName}>Symbosys</Text>
                     <Text style={styles.brandTagline}>Shaping Tomorrow's Leaders</Text>
                 </View>
             </View>
@@ -118,7 +118,7 @@ const LoginScreen = ({ navigation }: any) => {
             </KeyboardAvoidingView>
 
             <View style={styles.bottomFooter}>
-                <Text style={styles.footerInfo}>BrightWood Education Systems • v1.0.4</Text>
+                <Text style={styles.footerInfo}>Symbosys Education Systems • v1.0.4</Text>
             </View>
         </SafeAreaView>
     );

@@ -26,7 +26,7 @@ const TeacherPersonalInfoScreen = ({ navigation }: any) => {
         gender: 'Female',
         bloodGroup: 'O+',
         nationality: 'American',
-        email: 'sarah.wilson@brightwood.edu',
+        email: 'sarah.wilson@Symbosys.edu',
         phone: '+1 (555) 123-4567',
         emergencyContact: '+1 (555) 987-6543',
         emergencyName: 'John Wilson (Spouse)',
