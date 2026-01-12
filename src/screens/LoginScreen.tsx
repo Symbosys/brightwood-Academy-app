@@ -22,7 +22,7 @@ const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }: any) => {
     const [loginId, setLoginId] = useState('');
-    const [password, setPassword] = useState(''); // This will store the formatted Date string
+    const [password, setPassword] = useState(''); // Stores Date string for Student/Teacher
     const [role, setRole] = useState<'Student' | 'Teacher' | 'Parent'>('Student');
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState(new Date());
@@ -44,14 +44,14 @@ const LoginScreen = ({ navigation }: any) => {
         const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
         const year = selectedDate.getFullYear();
 
-        // This sets the 'password' field to the date string
         setPassword(`${day}${month}${year}`);
     };
 
     const handleLogin = async () => {
-        if (!loginId || !password) {
-            const dateType = role === 'Teacher' ? 'Joining Date' : 'Date of Birth';
-            Alert.alert('Missing Details', `Please enter your ID and select your ${dateType}.`);
+        // Validation: Parent only needs loginId. Others need loginId + password (date)
+        if (!loginId || (role !== 'Parent' && !password)) {
+            const fieldType = role === 'Teacher' ? 'Joining Date' : 'Date of Birth';
+            Alert.alert('Missing Details', `Please enter your ID ${role !== 'Parent' ? `and ${fieldType}` : ''}.`);
             return;
         }
 
@@ -60,10 +60,9 @@ const LoginScreen = ({ navigation }: any) => {
             const endpoint = role.toLowerCase();
             const payloadKey = role === 'Student' ? 'loginId' : (role === 'Teacher' ? 'teacherLoginId' : 'parentsLoginId');
 
-            // API receives the date string (DDMMYYYY) in the password field
             const response = await api.post(`${endpoint}/login`, {
                 [payloadKey]: loginId,
-                password: password
+                password: role === 'Parent' ? "" : password // Send empty string for parent password if not used
             });
 
             const result = response.data;
@@ -128,44 +127,50 @@ const LoginScreen = ({ navigation }: any) => {
                             />
                         </View>
 
-                        {/* Date Picker Button (Used for all roles now) */}
-                        <View style={styles.inputWrapper}>
-                            <Text style={styles.inputLabel}>
-                                {role === 'Teacher' ? 'Joining Date' : 'Date of Birth'}
-                            </Text>
-                            <TouchableOpacity
-                                style={[styles.input, { justifyContent: 'center' }]}
-                                onPress={() => setOpen(true)}
-                                activeOpacity={0.7}
-                            >
-                                <Text style={{ color: password ? '#1E293B' : '#94A3B8', fontSize: 16 }}>
-                                    {password
-                                        ? `${password.slice(0, 2)} / ${password.slice(2, 4)} / ${password.slice(4)}`
-                                        : role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        {/* Date Picker - Hidden if Role is Parent */}
+                        {role !== 'Parent' && (
+                            <>
+                                <View style={styles.inputWrapper}>
+                                    <Text style={styles.inputLabel}>
+                                        {role === 'Teacher' ? 'Joining Date' : 'Date of Birth'}
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={[styles.input, { justifyContent: 'center' }]}
+                                        onPress={() => setOpen(true)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Text style={{ color: password ? '#1E293B' : '#94A3B8', fontSize: 16 }}>
+                                            {password
+                                                ? `${password.slice(0, 2)} / ${password.slice(2, 4)} / ${password.slice(4)}`
+                                                : role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                        <DatePicker
-                            modal
-                            mode="date"
-                            open={open}
-                            date={date}
-                            onConfirm={handleConfirmDate}
-                            onCancel={() => setOpen(false)}
-                            title={role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
-                            maximumDate={new Date()}
-                        />
+                                <DatePicker
+                                    modal
+                                    mode="date"
+                                    open={open}
+                                    date={date}
+                                    onConfirm={handleConfirmDate}
+                                    onCancel={() => setOpen(false)}
+                                    title={role === 'Teacher' ? "Select Joining Date" : "Select Date of Birth"}
+                                    maximumDate={new Date()}
+                                />
+                            </>
+                        )}
 
                         <TouchableOpacity
-                            style={[styles.loginBtn, loading && { opacity: 0.7 }]}
+                            style={[styles.loginBtn, loading && { opacity: 0.7 }, { marginTop: role === 'Parent' ? 30 : 10 }]}
                             onPress={handleLogin}
                             disabled={loading}
                         >
-                            {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.loginBtnText}>Login as {role}</Text>}
+                            {loading ? (
+                                <ActivityIndicator color="#FFFFFF" />
+                            ) : (
+                                <Text style={styles.loginBtnText}>Login as {role}</Text>
+                            )}
                         </TouchableOpacity>
-
-                        {/* Footer UI... */}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -313,7 +318,6 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
         ...Platform.select({
             ios: { shadowColor: '#4F46E5', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 15 },
             android: { elevation: 8 },
